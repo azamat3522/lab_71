@@ -22,4 +22,4 @@ class Quote(models.Model):
 
     class Meta:
         verbose_name = 'Цитата'
-        verbose_name = 'Цитаты'
+        verbose_name_plural = 'Цитаты'

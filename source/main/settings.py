@@ -40,7 +40,7 @@ INSTALLED_APPS = [
     'api_v1',
     'rest_framework',
     'rest_framework.authtoken',
-    'webapp'
+    'webapp',
 ]
 
 MIDDLEWARE = [
@@ -129,7 +129,7 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework.authentication.TokenAuthentication',
     ),
-    'DEFAULT_PERMISSION_CLASSES': (
-        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly',
+    'DEFAULT_RENDERER_CLASSES': (
+        'rest_framework.renderers.JSONRenderer',
     )
 }
