@@ -120,29 +120,6 @@ function checkAuth() {
     }
 }
 
-function rateUp(id) {
-    let request = makeRequest('quote/' + id + '/rate_up', 'post', false);
-    request.done(function(data, status, response) {
-        console.log('Rated up quote with id ' + id + '.');
-        $('#rating_' + id).text(data.rating);
-    }).fail(function(response, status, message) {
-        console.log('Could not rate up quote with id ' + id + '.');
-        console.log(response.responseText);
-    });
-}
-
-function rateDown(id) {
-    let request = makeRequest('quote/' + id + '/rate_down', 'post', false);
-    request.done(function(data, status, response) {
-        console.log('Rated down quote with id ' + id + '.');
-        $('#rating_' + id).text(data.rating);
-    }).fail(function(response, status, message) {
-        console.log('Could not rate down quote with id ' + id + '.');
-        console.log(response.responseText);
-    });
-}
-
-
 function createForm() {
     createLink.on('submit', function(event) {
         event.preventDefault();
@@ -167,14 +144,48 @@ function createForm() {
     });
 }
 
-function createQuote(text, author_name, author_email) {
-    const credentials = {text, author_name, author_email};
+function createQuote(id, text, author_name, author_email) {
+    const credentials = {id, text, author_name, author_email};
     let request = makeRequest('quote', 'post', false, credentials);
     request.done(function(data, status, response) {
         console.log('Create Quote');
         formModal.modal('hide');
     }).fail(function(response, status, message) {
         console.log('Could not create quote');
+        console.log(response.responseText);
+    });
+
+}
+
+function rateUp(id) {
+    let request = makeRequest('quote/' + id + '/rate_up', 'post', false);
+    request.done(function(data, status, response) {
+        console.log('Rated up quote with id ' + id + '.');
+        $('#rating_' + id).text(data.rating);
+    }).fail(function(response, status, message) {
+        console.log('Could not rate up quote with id ' + id + '.');
+        console.log(response.responseText);
+    });
+}
+
+function rateDown(id) {
+    let request = makeRequest('quote/' + id + '/rate_down', 'post', false);
+    request.done(function(data, status, response) {
+        console.log('Rated down quote with id ' + id + '.');
+        $('#rating_' + id).text(data.rating);
+    }).fail(function(response, status, message) {
+        console.log('Could not rate down quote with id ' + id + '.');
+        console.log(response.responseText);
+    });
+}
+
+function deleteQuote(id) {
+    let request = makeRequest('quotes/' + id, 'delete', true,);
+    request.done(function(data, status, response) {
+        $('#quote_' + id).addClass('d-none');
+        console.log('quote successfully deleted');
+    }).fail(function(response, status, message) {
+        console.log('Could not delete quote');
         console.log(response.responseText);
     });
 
@@ -195,6 +206,7 @@ function getQuotes() {
                 <p id="rating_${item.id}">${item.rating}</p>
                 <p><a href="#" class="btn btn-success" id="rate_up_${item.id}">+</a></p>
                 <p><a href="#" class="btn btn-danger" id="rate_down_${item.id}">-</a></p>
+                <a href="#" class="btn btn-primary" id="delete_quote_${item.id}">Delete</a>
             </div>`));
             $('#rate_up_' + item.id).on('click', function(event) {
                 console.log('click');
@@ -205,6 +217,11 @@ function getQuotes() {
                 console.log('click');
                 event.preventDefault();
                 rateDown(item.id);
+            });
+            $('#delete_quote_' + item.id).on('click', function(event) {
+                console.log('click');
+                event.preventDefault();
+                deleteQuote(item.id);
             });
         });
 
